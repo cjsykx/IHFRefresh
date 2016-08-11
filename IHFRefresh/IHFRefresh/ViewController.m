@@ -40,7 +40,7 @@
     self.tableView = tableView;
     
     
-    [self setupHeaderWithMethod4];
+    [self setupHeaderWithMethod1];
     [self setupFooterWithMethod4];
     
     [self ifNeedcustomButtonClickAction2];
@@ -58,7 +58,9 @@
     __weak __typeof(self) weakSelf = self;
     _tableView.refreshHeader = [IHFRefreshHeaderView headerWithRefreshingOperation:^{
         
-        [weakSelf reloadTableViewData:nil];
+        [weakSelf performSelector:@selector(reloadTableViewData:) withObject:nil afterDelay:1];
+        
+//        [weakSelf reloadTableViewData:nil];
     }];
 }
 

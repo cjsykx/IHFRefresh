@@ -10,7 +10,18 @@
 
 @interface IHFRefreshFooterView : IHFRefreshView
 
+/**
+ Pull up for refresh
+ 
+ @ refreshingOperation : Do the refresh in the block
+ */
 +(instancetype)footerWithRefreshingOperation:(BeginRefreshingOperation)refreshingOperation;
+
+/**
+ Pull up for refresh
+ 
+ @ target : Do the refresh in the target to perform the action!
+ */
 
 + (instancetype)footerWithRefreshingTarget:(id)target refreshingAction:(SEL)action;
 

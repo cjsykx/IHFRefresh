@@ -16,7 +16,19 @@
 @end
 
 @interface IHEmptyDataView : UIView
+
+/**
+ Empty data view add in view 
+ 
+ @title : The title can be nil , if nil , default use the title from IHEmptyDataview.xib
+ @buttonTitle : The buttonTitle can be nil , if nil , default use the buttonTitle from IHEmptyDataview.xib
+ */
 +(instancetype)emptyDataViewShowInView:(UIView *)view title:(NSString *)title buttonTitle:(NSString *)buttonTitle;
+
+
+- (void)showPopupAnimationInView:(UIView *)inView;
+- (void)hidePopupAnimation;
+
 
 @property (weak,nonatomic) id <EmptyDataViewDelagete> delegate;
 

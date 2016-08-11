@@ -7,7 +7,6 @@
 //
 
 #import "UIScrollView+IHFEmptyData.h"
-#import "IHEmptyDataView.h"
 #import "IHFRefresh.h"
 #import "UIScrollView+IHFRefresh.h"
 #import <objc/runtime.h>
@@ -20,6 +19,7 @@ NSString const *IHFRefreshActionKey = @"IHFRefreshActionKey";
 @implementation UIScrollView (IHFEmptyData)
 
 #pragma mark - empty data view show and hide 
+
 -(void)showEmptyDataView{
     [self showEmptyDataViewWithTitle:nil buttonTitle:nil];
 }
@@ -27,7 +27,7 @@ NSString const *IHFRefreshActionKey = @"IHFRefreshActionKey";
 -(void)showEmptyDataViewWithTitle:(NSString *)title buttonTitle:(NSString *)buttonTitle{
     if (!self) return; // if self is nil , not add the data view
     
-    if(!self.emptyDataView) {
+    if(!self.emptyDataView) { // Use lazy load empty data view
         
         IHEmptyDataView *dataView = [IHEmptyDataView emptyDataViewShowInView:self title:title buttonTitle:buttonTitle];
         
@@ -58,9 +58,19 @@ NSString const *IHFRefreshActionKey = @"IHFRefreshActionKey";
         self.emptyDataView = dataView;
     }
     
-    self.emptyDataView.hidden = NO;
+    [self.emptyDataView showPopupAnimationInView:self];
 }
 
+- (void)addTarget:(id)target refreshAction:(SEL)action{
+    self.refreshTarget = target;
+    self.refreshAction = action;
+}
+
+-(void)hideEmptyDataView{
+    [self.emptyDataView hidePopupAnimation];
+}
+
+#pragma mark - reload data method
 -(void)reloadDataWithEmptyData{
     [self reloadDataWithEmptyDataViewTitle:nil buttonTitle:nil];
 }
@@ -88,18 +98,8 @@ NSString const *IHFRefreshActionKey = @"IHFRefreshActionKey";
     }
 }
 
--(void)hideEmptyDataView{
-    self.emptyDataView.hidden = YES;
-}
-
-- (void)addTarget:(id)target refreshAction:(SEL)action{
-    self.refreshTarget = target;
-    self.refreshAction = action;
-}
-
-
 #pragma mark - getter and setter
--(void)setEmptyDataView:(UIView *)emptyDataView{
+-(void)setEmptyDataView:(IHEmptyDataView *)emptyDataView{
     
     objc_setAssociatedObject(self, &IHFEmptyDataViewKey, emptyDataView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -117,6 +117,7 @@ NSString const *IHFRefreshActionKey = @"IHFRefreshActionKey";
 }
 
 -(void)setRefreshTarget:(id)refreshTarget{
+    
     objc_setAssociatedObject(self, &IHFRefreshTargetKey, refreshTarget, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -127,14 +128,12 @@ NSString const *IHFRefreshActionKey = @"IHFRefreshActionKey";
 -(void)setRefreshAction:(SEL)refreshAction{
     
     NSString *action = NSStringFromSelector(refreshAction);
-    
     objc_setAssociatedObject(self, &IHFRefreshActionKey, action, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 -(SEL)refreshAction{
     
     id action = objc_getAssociatedObject(self, &IHFRefreshActionKey);
-    
     return NSSelectorFromString(action);
 }
 @end
