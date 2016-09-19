@@ -18,7 +18,7 @@
  
 */
 
--(void)showEmptyDataView;
+- (void)showEmptyDataView;
 
 /**
  Show the empty view from IHEmptyDataViewXib!
@@ -28,14 +28,14 @@
  
  */
 
--(void)showEmptyDataViewWithTitle:(NSString *)title buttonTitle:(NSString *)buttonTitle;
+- (void)showEmptyDataViewWithTitle:(NSString *)title buttonTitle:(NSString *)buttonTitle;
 
 /**
  hide the empty view from IHEmptyDataViewXib!
  
  */
 
--(void)hideEmptyDataView;
+- (void)hideEmptyDataView;
 
 /** 
  Relaod data , if the data is empty , it will auto show the empty data for you ,otherwise it will hide the emprty
@@ -43,7 +43,7 @@
  @ Main for table View or colletion View to relaod data !
  @ The empty data view is IHEmptyDataViewXib!
  */
--(void)reloadDataWithEmptyData;
+- (void)reloadDataWithEmptyData;
 
 /**
  Relaod data , if the data is empty , it will auto show the empty data you ,otherwise it will hide the emprty
@@ -54,7 +54,7 @@
 
  */
 
--(void)reloadDataWithEmptyDataViewTitle:(NSString *)title buttonTitle:(NSString *)buttonTitle;
+- (void)reloadDataWithEmptyDataViewTitle:(NSString *)title buttonTitle:(NSString *)buttonTitle;
 
 // the fresh method is call by controller and view !
 // if not implementation in controller or view , it will to call drop-down refresh method！

@@ -15,7 +15,7 @@
  
  @ refreshingOperation : Do the refresh in the block
  */
-+(instancetype)footerWithRefreshingOperation:(BeginRefreshingOperation)refreshingOperation;
++ (instancetype)footerWithRefreshingOperation:(BeginRefreshingOperation)refreshingOperation;
 
 /**
  Pull up for refresh

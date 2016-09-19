@@ -18,7 +18,7 @@ static const NSString * IHFRefreshHeaderKey = @"IHFRefreshHeaderKey";
 
 #pragma mark - Refresh Header view
 
--(void)setRefreshHeader:(IHFRefreshHeaderView *)refreshHeader{
+- (void)setRefreshHeader:(IHFRefreshHeaderView *)refreshHeader {
     
     if (refreshHeader != self.refreshHeader) {
         
@@ -35,13 +35,13 @@ static const NSString * IHFRefreshHeaderKey = @"IHFRefreshHeaderKey";
     
 }
 
-- (IHFRefreshHeaderView *)refreshHeader{
+- (IHFRefreshHeaderView *)refreshHeader {
     return objc_getAssociatedObject(self, &IHFRefreshHeaderKey);
 }
 
 #pragma mark - Refresh footer view
 
--(void)setRefreshFooter:(IHFRefreshFooterView *)refreshFooter{
+- (void)setRefreshFooter:(IHFRefreshFooterView *)refreshFooter {
     
     if (refreshFooter != self.refreshFooter) {
         
@@ -57,9 +57,7 @@ static const NSString * IHFRefreshHeaderKey = @"IHFRefreshHeaderKey";
     }
 }
 
-- (IHFRefreshFooterView *)refreshFooter{
+- (IHFRefreshFooterView *)refreshFooter {
     return objc_getAssociatedObject(self, &IHFRefreshFooterKey);
 }
-
-
 @end

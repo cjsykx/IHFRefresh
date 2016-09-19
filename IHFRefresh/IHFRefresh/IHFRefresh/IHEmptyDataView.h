@@ -12,7 +12,7 @@
 
 @optional
 
--(void)emptyDataView:(IHEmptyDataView *)emptyData didClickRefreshBtn:(UIButton *)sender;
+- (void)emptyDataView:(IHEmptyDataView *)emptyData didClickRefreshBtn:(UIButton *)sender;
 @end
 
 @interface IHEmptyDataView : UIView
@@ -23,11 +23,13 @@
  @title : The title can be nil , if nil , default use the title from IHEmptyDataview.xib
  @buttonTitle : The buttonTitle can be nil , if nil , default use the buttonTitle from IHEmptyDataview.xib
  */
-+(instancetype)emptyDataViewShowInView:(UIView *)view title:(NSString *)title buttonTitle:(NSString *)buttonTitle;
++ (instancetype)emptyDataViewShowInView:(UIView *)view title:(NSString *)title buttonTitle:(NSString *)buttonTitle;
 
-
-- (void)showPopupAnimationInView:(UIView *)inView;
-- (void)hidePopupAnimation;
+/**
+ Show with animation
+ */
+- (void)showAnimationInView:(UIView *)inView;
+- (void)hide;
 
 
 @property (weak,nonatomic) id <EmptyDataViewDelagete> delegate;

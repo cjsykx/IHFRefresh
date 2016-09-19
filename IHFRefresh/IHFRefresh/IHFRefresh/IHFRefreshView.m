@@ -23,7 +23,7 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
 @end
 @implementation IHFRefreshView
 
-- (id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
     
@@ -52,11 +52,11 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
     return self;
 }
 
-+ (instancetype)refreshView{
++ (instancetype)refreshView {
     return [[self alloc] init];
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview{
+- (void)willMoveToSuperview:(UIView *)newSuperview {
     [super willMoveToSuperview:newSuperview];
         
     if (newSuperview && ![newSuperview isKindOfClass:[UIScrollView class]]) return;
@@ -64,7 +64,6 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
     [self.superview removeObserver:self forKeyPath:IHFRefreshViewObservingkeyPath];
 
     if (newSuperview) {
-        
         _scrollView = (UIScrollView *)newSuperview;
         _scrollView.alwaysBounceVertical = YES;
         [_scrollView addObserver:self forKeyPath:IHFRefreshViewObservingkeyPath options:NSKeyValueObservingOptionNew context:nil];
@@ -72,8 +71,14 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
     }
 }
 
-- (void)didMoveToSuperview{
+- (void)didMoveToSuperview {
     [super didMoveToSuperview];
+    self.clipsToBounds = YES;
+}
+
+- (void)layoutSubviews {
+    
+    [super layoutSubviews];
     
     CGFloat refreshWidth = self.scrollView.frameWidth;
     
@@ -82,12 +87,7 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
         refreshWidth = screenW;
     }
     self.bounds = CGRectMake(0, 0, refreshWidth, IHFRefreshViewDefaultHeight);
-    self.clipsToBounds = YES;
-}
 
-- (void)layoutSubviews{
-    [super layoutSubviews];
-    
     // activityIndicatorView frame
     CGFloat viewCenterX = self.frameWidth * 0.5 - 80;
     CGFloat viewCenterY = self.frameHeight * 0.5 + 20;
@@ -105,24 +105,24 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
     _timeIndicator.center = CGPointMake(timeCenterX,timeCenterY);
 }
 
-- (NSString *)lastRefreshingTimeString{
+- (NSString *)lastRefreshingTimeString {
     if (_lastRefreshingTimeString == nil) {
         return [self refreshingTimeString];
     }
     return _lastRefreshingTimeString;
 }
 
-- (void)addTarget:(id)target refreshAction:(SEL)action{
+- (void)addTarget:(id)target refreshAction:(SEL)action {
     _beginRefreshingTarget = target;
     _beginRefreshingAction = action;
 }
 
--(UIEdgeInsets)newEdgeInsetsWithOriginalEdgeInsets:(UIEdgeInsets)edgeInsets{
+-(UIEdgeInsets)newEdgeInsetsWithOriginalEdgeInsets:(UIEdgeInsets)edgeInsets {
     
     return UIEdgeInsetsMake(_originalEdgeInsets.top + edgeInsets.top, _originalEdgeInsets.left + edgeInsets.left, _originalEdgeInsets.bottom + edgeInsets.bottom, _originalEdgeInsets.right + edgeInsets.right);
 }
 
-- (void)setRefreshState:(IHFRefreshViewState)refreshState{
+- (void)setRefreshState:(IHFRefreshViewState)refreshState {
     
     _refreshState = refreshState;
     
@@ -154,15 +154,13 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
             }
         }
             break;
-        case IHFRefreshViewStateWillRefresh:
-        {
+        case IHFRefreshViewStateWillRefresh: {
             _textIndicator.text = _textForWillRefreshState;
             [UIView animateWithDuration:0.5 animations:^{
             }];
         }
             break;
-        case IHFRefreshViewStateNormal:
-        {
+        case IHFRefreshViewStateNormal: {
             [self stopLoading:self.curveView];
 
             [UIView animateWithDuration:0.5 animations:^{
@@ -177,7 +175,12 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
     }
 }
 
-- (void)endRefreshing{
+- (void)beginRefreshing {
+    // Override in Header view
+    [self setRefreshState:IHFRefreshViewStateRefreshing];
+}
+
+- (void)endRefreshing {
     [UIView animateWithDuration:0.3 animations:^{
         _scrollView.contentInset = _originalEdgeInsets;
     } completion:^(BOOL finished) {
@@ -188,24 +191,16 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
     }];
 }
 
--(void)beginRefreshing{
-    
-    [self setRefreshState:IHFRefreshViewStateRefreshing];
-}
-
 // 更新时间
-- (NSString *)refreshingTimeString{
+- (NSString *)refreshingTimeString {
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"HH:mm";
     return [formatter stringFromDate:date];
 }
 
--(void)setBeginRefreshingOperation:(void (^)())beginRefreshingOperation{
-}
-
 #pragma mark - start and stop loading
-- (void)startLoading:(UIView *)rotateView{
+- (void)startLoading:(UIView *)rotateView {
     rotateView.transform = CGAffineTransformIdentity;
     CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.toValue = @(M_PI * 2.0);
@@ -217,7 +212,7 @@ CGFloat const IHFTimeIndicatorMargin = 10.0f;
     
 }
 
-- (void)stopLoading:(UIView *)rotateView{
+- (void)stopLoading:(UIView *)rotateView {
     [rotateView.layer removeAllAnimations];
 }
 

@@ -10,4 +10,3 @@
 #import "IHFRefreshFooterView.h"
 #import "UIScrollView+IHFRefresh.h"
 #import "UIScrollView+IHFEmptyData.h"
-#import "UITableView+IHF.h"

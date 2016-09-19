@@ -15,13 +15,13 @@
 
 @implementation IHEmptyDataView
 
-+(instancetype)emptyDataViewLoadFromXib{
++ (instancetype)emptyDataViewLoadFromXib {
     
     IHEmptyDataView *view = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil] lastObject];
     return view;
 }
 
-+(instancetype)emptyDataViewShowInView:(UIView *)view title:(NSString *)title buttonTitle:(NSString *)buttonTitle{
++ (instancetype)emptyDataViewShowInView:(UIView *)view title:(NSString *)title buttonTitle:(NSString *)buttonTitle {
     
     IHEmptyDataView *emptyView = [self emptyDataViewLoadFromXib];
     
@@ -31,21 +31,19 @@
     emptyView.backgroundColor = view.backgroundColor;
     
     [emptyView setFrameX:(view.frameWidth - emptyView.frameWidth) * 0.5];
-//    [emptyView setFrameY:(view.frameHeight - emptyView.frameHeight) * 0.5];
-
     CGFloat screenW = [[UIScreen mainScreen] bounds].size.width;
-    if(view.frameWidth > screenW){
+    if(view.frameWidth > screenW) {
         [emptyView setCenterX:screenW * 0.5];
     }
     
     [view addSubview:emptyView];
 
-    [emptyView showPopupAnimationInView:view];
+    [emptyView showAnimationInView:view];
     
     return emptyView;
 }
 
-- (void)showPopupAnimationInView:(UIView *)inView{
+- (void)showAnimationInView:(UIView *)inView {
 
     // Show
     self.hidden = NO;
@@ -55,14 +53,17 @@
     self.center = CGPointMake(inView.center.x, -self.bounds.size.height * 0.5);
     self.transform = CGAffineTransformMakeRotation(-M_1_PI / 2);
     
-    [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+    [UIView animateWithDuration:0.5f
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
         weakSelf.transform = CGAffineTransformMakeRotation(0);
         [weakSelf setFrameY:(inView.frameHeight - self.frameHeight) * 0.5];
 
     } completion:nil];
 }
 
-- (void)hidePopupAnimation{
+- (void)hide{
     self.hidden = YES;
 }
 

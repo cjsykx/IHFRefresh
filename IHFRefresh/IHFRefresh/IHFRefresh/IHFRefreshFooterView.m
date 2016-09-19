@@ -15,7 +15,7 @@
 
 @implementation IHFRefreshFooterView
 
-- (id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         self.textForNormalState = @"上拉可以加载最新数据";
@@ -26,15 +26,17 @@
     return self;
 }
 
-- (void)layoutSubviews{
+- (void)layoutSubviews {
     [super layoutSubviews];
-//    self.activityIndicatorView.hidden = YES;
+    
+    self.scrollViewEdgeInsets = UIEdgeInsetsMake(0, 0, self.frameHeight, 0);
+
     _originalScrollViewContentHeight = self.scrollView.contentSize.height;
     
     CGFloat refreshWidth = self.scrollView.frameWidth;
     
     CGFloat screenW = [[UIScreen mainScreen] bounds].size.width;
-    if(self.scrollView.frameWidth > screenW){
+    if(self.scrollView.frameWidth > screenW) {
         refreshWidth = screenW;
     }
 
@@ -42,19 +44,18 @@
     self.hidden = [self shouldHide];
 }
 
-- (void)didMoveToSuperview{
+- (void)didMoveToSuperview {
     [super didMoveToSuperview];
-    self.scrollViewEdgeInsets = UIEdgeInsetsMake(0, 0, self.frameHeight, 0);
 }
 
-- (BOOL)shouldHide{
+- (BOOL)shouldHide {
     if (self.isEffectedByNavigationController) {
         return (self.scrollView.bounds.size.height - IHFNavigationBarHeight > self.frameY); //  + self.scrollView.contentInset.bottom
     }
-    return (self.scrollView.bounds.size.height> self.frameY); // + self.scrollView.contentInset.bottom
+    return (self.scrollView.bounds.size.height > self.frameY); // + self.scrollView.contentInset.bottom
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
     if (![keyPath isEqualToString:IHFRefreshViewObservingkeyPath] || self.refreshState == IHFRefreshViewStateRefreshing) return;
     
@@ -78,7 +79,7 @@
     }
     
     // trigger RefreshViewState will refresh
-    if (y > criticalY && (IHFRefreshViewStateNormal == self.refreshState)) {
+    if (y > criticalY && (IHFRefreshViewStateNormal == self.refreshState))  {
         if (self.hidden) return;
         [self setRefreshState:IHFRefreshViewStateWillRefresh];
         return;
@@ -91,22 +92,18 @@
 }
 
 #pragma mark - 
-+ (instancetype)footerWithRefreshingOperation:(BeginRefreshingOperation)refreshingOperation
-{
++ (instancetype)footerWithRefreshingOperation:(BeginRefreshingOperation)refreshingOperation {
     IHFRefreshFooterView *footer = [[self alloc] init];
     footer.refreshingOperation = refreshingOperation;
     return footer;
 }
-+ (instancetype)footerWithRefreshingTarget:(id)target refreshingAction:(SEL)action
-{
+
++ (instancetype)footerWithRefreshingTarget:(id)target refreshingAction:(SEL)action {
     IHFRefreshFooterView *footer = [[self alloc] init];
     footer.beginRefreshingTarget = target;
     footer.beginRefreshingAction = action;
     return footer;
 }
 
--(void)dealloc {
-//    [self removeFromSuperview];
-}
 
 @end

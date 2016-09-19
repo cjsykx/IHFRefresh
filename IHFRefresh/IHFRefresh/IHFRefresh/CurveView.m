@@ -25,16 +25,16 @@
 
 @implementation CurveView
 
-+ (Class)layerClass{
++ (Class)layerClass {
     return [CurveLayer class];
 }
 
--(void)setProgress:(CGFloat)progress{
+- (void)setProgress:(CGFloat)progress {
     self.curveLayer.progress = progress;
     [self.curveLayer setNeedsDisplay];
 }
 
--(void)willMoveToSuperview:(UIView *)newSuperview{
+- (void)willMoveToSuperview:(UIView *)newSuperview {
     self.curveLayer = [CurveLayer layer];
     self.curveLayer.frame = self.bounds;
     self.curveLayer.contentsScale = [UIScreen mainScreen].scale;
@@ -46,7 +46,7 @@
 
 #pragma mark --
 
--(CGPoint)getMiddlePointWithPoint1:(CGPoint)point1 point2:(CGPoint)point2{
+- (CGPoint)getMiddlePointWithPoint1:(CGPoint)point1 point2:(CGPoint)point2 {
     
     CGFloat middle_x = (point1.x + point2.x)/2;
     CGFloat middle_y = (point1.y + point2.y)/2;
@@ -54,7 +54,7 @@
     return CGPointMake(middle_x, middle_y);
 }
 
--(CGFloat)getDistanceWithPoint1:(CGPoint)point1 point2:(CGPoint)point2{
+- (CGFloat)getDistanceWithPoint1:(CGPoint)point1 point2:(CGPoint)point2 {
     return sqrtf(pow(fabs(point1.x - point2.x), 2) + pow(fabs(point1.y - point2.y), 2));
 }
 

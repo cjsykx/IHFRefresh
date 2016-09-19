@@ -15,9 +15,9 @@
 
 @implementation IHFRefreshHeaderView
 
-- (id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)  {
         self.textForNormalState = @"下拉可以加载最新数据";
         self.textForRefreshingState = @"正在加载最新数据,请稍候";
         self.textForWillRefreshState = @"松开即可加载最新数据";
@@ -26,22 +26,23 @@
     return self;
 }
 
-- (CGFloat)yOfCenterPoint{
+- (CGFloat)yOfCenterPoint {
     return - (self.frameHeight * 0.5);
 }
 
-- (void)didMoveToSuperview{
+- (void)didMoveToSuperview {
     [super didMoveToSuperview];
-    self.scrollViewEdgeInsets = UIEdgeInsetsMake(self.frameHeight, 0, 0, 0);
 }
 
-- (void)layoutSubviews{
+- (void)layoutSubviews {
     [super layoutSubviews];
     
+    self.scrollViewEdgeInsets = UIEdgeInsetsMake(self.frameHeight, 0, 0, 0);
+
     CGFloat refreshWidth = self.scrollView.frameWidth;
     
     CGFloat screenW = [[UIScreen mainScreen] bounds].size.width;
-    if(self.scrollView.frameWidth > screenW){
+    if(self.scrollView.frameWidth > screenW) {
         refreshWidth = screenW;
     }
     
@@ -56,16 +57,23 @@
         self.scrollView.contentOffset = temp;
         
         _hasLayoutedForManuallyRefreshing = YES;
-    } else {
-//        self.activityIndicatorView.hidden = !self.isManuallyRefreshing;
     }
 }
 
-- (void)autoRefreshWhenViewDidAppear{
+- (void)autoRefreshWhenViewDidAppear {
     self.manuallyRefreshing = YES;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+- (void)beginRefreshing {
+    CGPoint temp = self.scrollView.contentOffset;
+    temp.y -= self.frameHeight * 2;
+    self.scrollView.contentOffset = temp;
+    temp.y += self.frameHeight;
+    self.scrollView.contentOffset = temp;
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
     // if the controller is refresing , return!
     if (![keyPath isEqualToString:IHFRefreshViewObservingkeyPath] || self.refreshState == IHFRefreshViewStateRefreshing) return;
@@ -101,23 +109,18 @@
 #pragma mark - 
 
 + (instancetype)headerWithRefreshingOperation:(BeginRefreshingOperation)refreshingOperation
-{
+ {
     IHFRefreshHeaderView *header = [[self alloc] init];
     header.refreshingOperation = refreshingOperation;
     return header;
 }
+
 + (instancetype)headerWithRefreshingTarget:(id)target refreshingAction:(SEL)action
-{
+ {
     IHFRefreshHeaderView *header = [[self alloc] init];
     header.beginRefreshingTarget = target;
     header.beginRefreshingAction = action;
     return header;
-}
-
-
--(void)dealloc {
-//    [self.superview removeObserver:self forKeyPath:IHFRefreshViewObservingkeyPath];
-//    [self removeFromSuperview];
 }
 
 @end
